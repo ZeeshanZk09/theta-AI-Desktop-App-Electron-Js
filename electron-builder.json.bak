@@ -1,0 +1,36 @@
+{
+    "appId": "com.Theta.ai",
+    "productName": "Theta AI",
+    "directories": {
+        "output": "dist_electron"
+    },
+    "files": [
+        "dist/**/*",
+        "electron/**/*",
+        "public/**/*",
+        "node_modules/**/*",
+        "package.json",
+        "wake_word_bg.py"
+    ],
+    "extraResources": [
+        {
+            "from": "public",
+            "to": "public",
+            "filter": [
+                "**/*"
+            ]
+        }
+    ],
+    "win": {
+        "target": [
+            "nsis"
+        ],
+        "icon": "public/audio/logo.ico"
+    },
+    "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true
+    }
+}

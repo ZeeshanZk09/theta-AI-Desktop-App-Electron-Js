@@ -1,0 +1,6 @@
+    connect, disconnect, status, messages,
+    analyser, micAnalyser, sendVideoFrame, sendTextMessage, sendMultimodalMessage, logs,
+    addLog, currentThought, isThinking, thinkingEnabled, setThinkingEnabled
+  } = useGeminiLive({
+    onSpeakingChanged: setIsAISpeaking,
+ 

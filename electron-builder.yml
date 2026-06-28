@@ -1,0 +1,42 @@
+appId: com.Theta.dsktp
+productName: Theta AI
+directories:
+  output: dist_electron
+  buildResources: public
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+  - .env.example
+  - audio/**/*
+  - public/**/*
+win:
+  target:
+    - nsis
+  icon: public/logo.png
+  signAndEditExecutable: false
+  verifyUpdateCodeSignature: true
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: Theta AI
+  artifactName: ${productName}-Setup-${version}.${ext}
+extraMetadata:
+  main: electron/main.js
+extraResources:
+  - from: .env.example
+    to: .env.example
+  - from: audio
+    to: audio
+  - from: public
+    to: public
+  - from: wake_word_bg.py
+    to: wake_word_bg.py
+  - from: stt_test.py
+    to: stt_test.py
+
+# Auto-Update Configuration
+publish:
+  provider: generic
+  url: 'https://Thetaaifiles.blob.core.windows.net/releases'

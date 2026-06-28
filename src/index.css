@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 2 4 6;
+    --foreground: 225 248 255;
+    --j-cyan: #00e5ff;
+    --j-void: #020406;
+    --panel-border: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    @apply bg-j-void text-j-text-primary antialiased overflow-hidden selection:bg-j-cyan/30 selection:text-j-cyan;
+    font-feature-settings: 'ss01', 'ss02', 'cv01', 'cv02';
+    font-size: clamp(15px, 0.2vw + 14px, 17px);
+    line-height: 1.5;
+  }
+
+  @keyframes appFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+      filter: blur(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glass-panel {
+    @apply bg-j-panel/80 backdrop-blur-2xl border border-white/[0.08] shadow-2xl;
+  }
+
+  .glass-card {
+    @apply bg-j-surface/60 backdrop-blur-xl border border-white/5 shadow-xl;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  }
+
+  .sidebar-transition {
+    transition:
+      width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.4s ease-out,
+      padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.3s ease;
+  }
+
+  .scanline {
+    width: 100%;
+    height: 100px;
+    z-index: 10;
+    background: linear-gradient(to bottom, transparent, rgba(0, 229, 255, 0.1), transparent);
+    position: absolute;
+    top: -100px;
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scan {
+    0% {
+      top: -100px;
+    }
+
+    100% {
+      top: 100%;
+    }
+  }
+
+  .sci-fi-grid {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(0, 229, 255, 0.05) 1px,
+      transparent 0
+    );
+    background-size: 20px 20px;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-pulse-fast {
+    animation: pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Premium JARVIS Scanning Effect */
+  @keyframes scanline-move {
+    0% {
+      transform: translateY(-100vh);
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+
+    100% {
+      transform: translateY(100vh);
+      opacity: 0;
+    }
+  }
+
+  .animate-heavy-scan {
+    animation: scanline-move 4s linear infinite;
+  }
+
+  /* Hexagonal Background Pattern */
+  .bg-hex-grid {
+    background-image:
+      linear-gradient(
+        30deg,
+        #0a1218 12%,
+        transparent 12.5%,
+        transparent 87%,
+        #0a1218 87.5%,
+        #0a1218
+      ),
+      linear-gradient(
+        150deg,
+        #0a1218 12%,
+        transparent 12.5%,
+        transparent 87%,
+        #0a1218 87.5%,
+        #0a1218
+      ),
+      linear-gradient(
+        30deg,
+        #0a1218 12%,
+        transparent 12.5%,
+        transparent 87%,
+        #0a1218 87.5%,
+        #0a1218
+      ),
+      linear-gradient(
+        150deg,
+        #0a1218 12%,
+        transparent 12.5%,
+        transparent 87%,
+        #0a1218 87.5%,
+        #0a1218
+      ),
+      linear-gradient(60deg, #111d25 25%, transparent 25.5%, transparent 75%, #111d25 75%, #111d25),
+      linear-gradient(60deg, #111d25 25%, transparent 25.5%, transparent 75%, #111d25 75%, #111d25);
+    background-size: 80px 140px;
+    background-position:
+      0 0,
+      0 0,
+      40px 70px,
+      40px 70px,
+      0 0,
+      40px 70px;
+  }
+
+  .readability-boost [class*='text-[8px]'],
+  .readability-boost [class*='text-[9px]'],
+  .readability-boost [class*='text-[10px]'] {
+    font-size: 0.75rem !important;
+    line-height: 1.35rem;
+  }
+
+  .readability-boost [class*='text-[11px]'],
+  .readability-boost [class*='text-[12px]'],
+  .readability-boost [class*='text-[13px]'] {
+    font-size: 0.8125rem !important;
+    line-height: 1.4rem;
+  }
+}
+
+/* Custom Scrollbar for "Tech" feel */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020406;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2d38;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff;
+}
+
+/* --- New Sci-Fi Minimalist Loading Styles --- */
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+
+  20% {
+    transform: skew(-2deg);
+  }
+
+  40% {
+    transform: skew(2deg);
+  }
+
+  60% {
+    transform: skew(-1deg);
+  }
+
+  80% {
+    transform: skew(1deg);
+  }
+
+  100% {
+    transform: skew(0deg);
+  }
+}
+
+.animate-glitch {
+  animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  color: #00e5ff;
+}
+
+@keyframes text-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-text-reveal {
+  animation: text-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.bg-scan-line {
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 229, 255, 0.02) 50%);
+  background-size: 100% 4px;
+}

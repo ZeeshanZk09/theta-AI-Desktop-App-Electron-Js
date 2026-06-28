@@ -1,0 +1,20 @@
+# AI Engineer Rapid Offer Sprint
+
+## 1) Market Angle
+*   **Target Audience:** SMBs with specific bottlenecks (lead qualification, data entry, customer support).
+*   **Positioning:** Low-commitment, high-impact 7-day pilot project, appealing in uncertain markets.
+
+## 2) 7-Day Execution Steps
+*   **Day 1:** Define single high-value outcome (e.g., Automated Lead Qualification System).
+*   **Day 2-3:** Package offer and set premium pricing for profitability.
+*   **Day 4-5:** Create Minimum Viable Product collateral (Landing Page, Proposal).
+*   **Day 6:** Build warm contacts list.
+*   **Day 7:** Pre-Sale and validation.
+
+## 3) Key Risks
+*   Scope Creep (major risk, undermines "Rapid" value).
+*   Under-delivery within 7 days.
+
+## 4) Expected ROI Assumptions
+*   High conversion rate due to trust with warm contacts.
+*   Quick revenue generation through premium pricing and focused offer.
