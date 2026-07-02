@@ -3,7 +3,7 @@ export function encode(bytes: Uint8Array): string {
   let binary = '';
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+    binary += String.fromCodePoint(bytes[i]);
   }
   return btoa(binary);
 }
@@ -11,11 +11,11 @@ export function encode(bytes: Uint8Array): string {
 export function decode(base64: string): Uint8Array {
   const binaryString = atob(base64);
   const len = binaryString.length;
-  const bytes = new Uint8Array(len);
+  const bytes: number[] = [];
   for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
+    bytes.push(binaryString.codePointAt(i) ?? 0);
   }
-  return bytes;
+  return new Uint8Array(bytes);
 }
 
 export async function decodeAudioData(
@@ -31,7 +31,7 @@ export async function decodeAudioData(
   for (let channel = 0; channel < numChannels; channel++) {
     const channelData = buffer.getChannelData(channel);
     for (let i = 0; i < frameCount; i++) {
-      channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
+      channelData[i] = dataInt16[i * numChannels + channel] / 32768;
     }
   }
   return buffer;

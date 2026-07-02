@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { logger } from "./logger";
 /**
  * Audio Player for Gemini Live API
  * Handles seamless 24kHz PCM audio playback with timestamp-based scheduling
@@ -98,7 +101,7 @@ export class AudioPlayer {
       this.nextStartTime += buffer.duration;
 
     } catch (error) {
-      console.error('Error scheduling audio chunk:', error);
+      logger.error('Error scheduling audio chunk:', error);
     }
   }
 
@@ -119,7 +122,7 @@ export class AudioPlayer {
     this.activeSources = [];
     this.nextStartTime = 0;
     
-    console.log('AudioPlayer: Playback queue cleared');
+    logger.log('AudioPlayer: Playback queue cleared');
   }
 
   /**

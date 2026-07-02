@@ -1,9 +1,10 @@
 import { Paperclip, X, Brain, Database, User, Users } from 'lucide-react';
+
 import { useAudio } from '../../hooks/useAudio';
 
 interface SystemControlsProps {
   handleNativeFileSelect: () => void;
-  attachedFiles: any[];
+  attachedFiles: { name: string; mimeType: string; data: string; }[];
   removeFile: (idx: number) => void;
   setIsMemoryModalOpen: (open: boolean) => void;
   setIsHistoryModalOpen: (open: boolean) => void;
@@ -51,12 +52,12 @@ const SystemControls: React.FC<SystemControlsProps> = ({
             {attachedFiles.length > 0 ? `${attachedFiles.length} Selected` : 'Multimodal Input'}
           </span>
         </div>
-        <div className='absolute inset-0 bg-j-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity'></div>
+        <div className='absolute inset-0 bg-j-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity' />
       </div>
 
       {attachedFiles.length > 0 && (
         <div className='flex flex-wrap gap-2 max-w-[200px] mt-[-10px] ml-2 animate-in slide-in-from-top-2 duration-300'>
-          {attachedFiles.map((file, idx) => (
+          {attachedFiles.map((file: { name: string; mimeType: string; data: string }, idx) => (
             <div
               key={idx}
               className='flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-lg group/file'
@@ -122,7 +123,7 @@ const SystemControls: React.FC<SystemControlsProps> = ({
             </div>
             <div
               className={`absolute inset-0 bg-${btn.color}/5 opacity-0 group-hover:opacity-100 transition-opacity`}
-            ></div>
+             />
           </div>
         ))}
       </div>

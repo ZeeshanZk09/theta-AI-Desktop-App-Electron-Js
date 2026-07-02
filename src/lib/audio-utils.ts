@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { logger } from "./logger";
 /**
  * Modern Audio processing utilities for Gemini Live API
  * Uses AudioWorkletNode instead of deprecated ScriptProcessorNode
@@ -26,7 +28,7 @@ export class AudioProcessor {
       // Load AudioWorklet processor
       await this.context.audioWorklet.addModule('/audio-processor-worklet.js');
     } catch (err) {
-      console.warn('AudioWorklet not supported, this should not happen in modern browsers', err);
+      logger.warn('AudioWorklet not supported, this should not happen in modern browsers', err);
       throw new Error('AudioWorklet not supported');
     }
 

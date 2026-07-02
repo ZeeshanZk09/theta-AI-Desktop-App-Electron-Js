@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { X, Minus, Maximize2, Music } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface YouTubePlayerProps {
   videoId: string;
@@ -79,11 +79,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId, onClose }) => {
           allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
           allowFullScreen
           className='w-full h-full'
-        ></iframe>
+         />
 
         {/* Ambient Glow */}
-        <div className='absolute -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full pointer-events-none'></div>
-        <div className='absolute -top-20 -right-20 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full pointer-events-none'></div>
+        <div className='absolute -bottom-20 -left-20 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full pointer-events-none' />
+        <div className='absolute -top-20 -right-20 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full pointer-events-none' />
       </div>
     </div>
   );

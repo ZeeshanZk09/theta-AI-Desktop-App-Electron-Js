@@ -109,9 +109,9 @@ const VoiceOrb: React.FC<VoiceOrbProps> = ({ isActive, analyser }) => {
     <div ref={containerRef} className="relative flex items-center justify-center w-full h-full min-h-[200px] overflow-hidden">
       {isActive && (
         <>
-          <div className="pulse-ring absolute border-blue-400 bg-blue-400 opacity-20 inset-0 m-auto" style={{ width: '20%', height: '20%', animationDelay: '0s' }}></div>
-          <div className="pulse-ring absolute border-blue-500 bg-blue-500 opacity-15 inset-0 m-auto" style={{ width: '30%', height: '30%', animationDelay: '-0.4s' }}></div>
-          <div className="pulse-ring absolute border-blue-600 bg-blue-600 opacity-10 inset-0 m-auto" style={{ width: '40%', height: '40%', animationDelay: '-0.8s' }}></div>
+          <div className="pulse-ring absolute border-blue-400 bg-blue-400 opacity-20 inset-0 m-auto" style={{ width: '20%', height: '20%', animationDelay: '0s' }} />
+          <div className="pulse-ring absolute border-blue-500 bg-blue-500 opacity-15 inset-0 m-auto" style={{ width: '30%', height: '30%', animationDelay: '-0.4s' }} />
+          <div className="pulse-ring absolute border-blue-600 bg-blue-600 opacity-10 inset-0 m-auto" style={{ width: '40%', height: '40%', animationDelay: '-0.8s' }} />
         </>
       )}
       <canvas

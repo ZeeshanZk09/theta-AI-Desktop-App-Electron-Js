@@ -12,13 +12,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, header, footer }) => 
             {/* Background Ambience */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 {/* Subtle Hex Grid */}
-                <div className="absolute inset-0 opacity-[0.03] bg-hex-grid bg-[size:30px_30px]"></div>
+                <div className="absolute inset-0 opacity-[0.03] bg-hex-grid bg-[size:30px_30px]" />
 
                 {/* Vignette */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B0F14_120%)]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0B0F14_120%)]" />
 
                 {/* Top Glow Line */}
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-j-cyan/20 to-transparent"></div>
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-j-cyan/20 to-transparent" />
             </div>
 
             {/* Main Content Container */}

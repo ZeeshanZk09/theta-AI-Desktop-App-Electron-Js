@@ -1,5 +1,5 @@
-import React from 'react';
 import { Activity, RefreshCw, Wrench } from 'lucide-react';
+import React from 'react';
 
 export interface AdvisorRecommendation {
   id: string;

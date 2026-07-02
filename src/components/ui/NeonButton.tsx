@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useAudio } from '../../hooks/useAudio';
 
 interface NeonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -38,7 +39,7 @@ const NeonButton: React.FC<NeonButtonProps> = ({
         >
             {/* Scanline Effect on Hover */}
             {variant !== 'ghost' && (
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[200%] group-hover:animate-scan opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[200%] group-hover:animate-scan opacity-0 group-hover:opacity-100 pointer-events-none" />
             )}
             <span className="relative z-10 flex items-center gap-2">{children}</span>
         </button>

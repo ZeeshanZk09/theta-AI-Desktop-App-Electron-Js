@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
-import { Message } from '../types';
+
+import { type Message } from '../types';
 
 interface TranscriptProps {
   messages: Message[];
@@ -62,7 +63,7 @@ const Transcript: React.FC<TranscriptProps> = ({ messages, currentInput, current
       {messages.length === 0 && !currentInput && !currentOutput && (
         <div className="h-full flex flex-col items-center justify-center text-muted-steel space-y-3 opacity-60 min-h-[200px]">
           <div className="w-12 h-12 rounded-full bg-glass-surface/30 flex items-center justify-center mb-2">
-            <span className="w-2 h-2 rounded-full bg-arc-blue animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-arc-blue animate-pulse" />
           </div>
           <p className="text-sm font-medium">System Ready</p>
           <p className="text-xs">Awaiting voice input...</p>

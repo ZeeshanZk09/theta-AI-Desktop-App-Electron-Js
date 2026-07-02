@@ -1,7 +1,8 @@
 import React from 'react';
-import DotGlobe from '../DotGlobe';
 
 import { ConnectionStatus } from '../../types';
+import DotGlobe from '../DotGlobe';
+
 
 interface AICoreProps {
     status: ConnectionStatus;
@@ -17,13 +18,13 @@ const AICore: React.FC<AICoreProps> = ({ status, isSpeaking, analyser, micAnalys
     return (
         <div className="relative w-full h-full flex items-center justify-center">
             {/* Outer Rotating Rings (status indicators) */}
-            <div className={`absolute w-[300px] h-[300px] rounded-full border border-j-steel/30 transition-all duration-1000 ${isSpeaking ? 'scale-110 border-j-cyan/30' : 'scale-100'}`}></div>
-            <div className={`absolute w-[280px] h-[280px] rounded-full border border-dashed border-j-steel/20 animate-spin-slow duration-[20s]`}></div>
+            <div className={`absolute w-[300px] h-[300px] rounded-full border border-j-steel/30 transition-all duration-1000 ${isSpeaking ? 'scale-110 border-j-cyan/30' : 'scale-100'}`} />
+            <div className="absolute w-[280px] h-[280px] rounded-full border border-dashed border-j-steel/20 animate-spin-slow duration-[20s]" />
 
             {/* Dynamic Status Glow */}
             <div className={`absolute w-[150px] h-[150px] rounded-full blur-[50px] transition-colors duration-500 opacity-20
         ${isConnected ? 'bg-j-cyan' : isConnecting ? 'bg-j-amber' : 'bg-red-500'}
-      `}></div>
+      `} />
 
             {/* Main Core Visualizer */}
             <div className="relative z-10 w-[240px] h-[240px] flex items-center justify-center">
@@ -46,9 +47,9 @@ const AICore: React.FC<AICoreProps> = ({ status, isSpeaking, analyser, micAnalys
                 </span>
                 {isConnected && (
                     <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse"></div>
-                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse delay-75"></div>
-                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse delay-150"></div>
+                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse" />
+                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse delay-75" />
+                        <div className="w-1 h-1 bg-j-cyan rounded-full animate-pulse delay-150" />
                     </div>
                 )}
             </div>

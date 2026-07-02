@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { Users, X, Plus, Trash2, Phone, Search } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { useAudio } from '../../hooks/useAudio';
 
 interface Contact {

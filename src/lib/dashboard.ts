@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoogleGenAI } from "@google/genai";
+
+import { logger } from "./logger";
 
 export interface DashboardData {
   headlines: string[];
@@ -65,7 +68,7 @@ export const fetchDashboardData = async (
 
     return null;
   } catch (error: any) {
-    console.error("Dashboard Fetch Error:", error);
+    logger.error("Dashboard Fetch Error:", error);
     return null;
   }
 };

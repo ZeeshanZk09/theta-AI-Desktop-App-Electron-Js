@@ -39,10 +39,10 @@ const HolographicCard: React.FC<HolographicCardProps> = ({
       {/* Corner Accents (Tech Feel) */}
       <div
         className={`absolute -top-[1px] -left-[1px] w-4 h-4 border-t border-l rounded-tl-2xl transition-colors ${variant === 'alert' ? 'border-j-amber' : 'border-j-cyan/50'}`}
-      ></div>
+       />
       <div
         className={`absolute -bottom-[1px] -right-[1px] w-4 h-4 border-b border-r rounded-br-2xl transition-colors ${variant === 'alert' ? 'border-j-amber' : 'border-j-cyan/50'}`}
-      ></div>
+       />
 
       {title && (
         <div className='flex items-center gap-2 p-4 border-b border-white/5 bg-white/[0.02]'>

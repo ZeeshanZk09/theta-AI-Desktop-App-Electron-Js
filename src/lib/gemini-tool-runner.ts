@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateImage } from './genai';
-import { SystemLog } from '../types/gemini-live';
+import { logger } from "./logger";
+import { type SystemLog } from '../types/gemini-live';
 
 export interface ToolExecutionContext {
   addLog: (type: SystemLog['type'], message: string, details?: any) => void;
@@ -21,10 +23,10 @@ export interface ToolExecutionContext {
 const logToolRunner = (stage: string, details?: Record<string, unknown>) => {
   const timestamp = new Date().toISOString();
   if (details) {
-    console.debug(`[GeminiToolRunner ${timestamp}] ${stage}`, details);
+    logger.debug(`[GeminiToolRunner ${timestamp}] ${stage}`, details);
     return;
   }
-  console.debug(`[GeminiToolRunner ${timestamp}] ${stage}`);
+  logger.debug(`[GeminiToolRunner ${timestamp}] ${stage}`);
 };
 
 export const handleToolCalls = async (
@@ -202,7 +204,7 @@ export const handleToolCalls = async (
           });
         }
       } catch (err: any) {
-        console.error('Image generation/save failed:', err);
+        logger.error('Image generation/save failed:', err);
         onVisualizingChanged?.(false);
         session.sendToolResponse({
           functionResponses: [{
@@ -252,7 +254,7 @@ export const handleToolCalls = async (
           }]
         });
       } catch (err) {
-        console.error('Store memory failed:', err);
+        logger.error('Store memory failed:', err);
       }
     } else if (call.name === 'get_memories') {
       addLog('tool', 'Retrieving stored memories');
@@ -267,7 +269,7 @@ export const handleToolCalls = async (
           }]
         });
       } catch (err) {
-        console.error('Get memories failed:', err);
+        logger.error('Get memories failed:', err);
       }
     } else if (call.name === 'send_whatsapp') {
       const { contactName, message } = call.args as any;
@@ -289,7 +291,7 @@ export const handleToolCalls = async (
           
           // Show PowerShell output in console for debugging
           if (result.output) {
-            console.log('[WhatsApp Automation] PowerShell Output:', result.output);
+            logger.log('[WhatsApp Automation] PowerShell Output:', result.output);
           }
           
           session.sendToolResponse({
@@ -308,8 +310,8 @@ export const handleToolCalls = async (
           
           // Show detailed error output
           if (result.stdout || result.stderr) {
-            console.error('[WhatsApp Automation] PowerShell STDOUT:', result.stdout);
-            console.error('[WhatsApp Automation] PowerShell STDERR:', result.stderr);
+            logger.error('[WhatsApp Automation] PowerShell STDOUT:', result.stdout);
+            logger.error('[WhatsApp Automation] PowerShell STDERR:', result.stderr);
           }
           
           session.sendToolResponse({
@@ -327,7 +329,7 @@ export const handleToolCalls = async (
           });
         }
       } catch (err) {
-        console.error('Store memory failed:', err);
+        logger.error('Store memory failed:', err);
       }
     } else if (call.name === 'add_note') {
       const { title, content, category } = call.args as any;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef } from 'react';
 
 interface ParticleSphereProps {
@@ -25,7 +26,7 @@ const ParticleSphere: React.FC<ParticleSphereProps> = ({
     if (!ctx) return;
 
     let animationFrameId: number;
-    let particles: { x: number; y: number; z: number; theta: number; phi: number }[] = [];
+    const particles: { x: number; y: number; z: number; theta: number; phi: number }[] = [];
 
     // Initialize particles on a sphere surface
     for (let i = 0; i < count; i++) {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Plus, Folder, X, FolderOpen } from 'lucide-react';
+import React from 'react';
 
 interface FolderExplorerProps {
   importedFolders: { name: string; path: string }[];
@@ -53,7 +53,7 @@ const FolderExplorer: React.FC<FolderExplorerProps> = ({
         ))}
       </div>
 
-      <div className='w-8 h-[1px] bg-white/10 mb-2'></div>
+      <div className='w-8 h-[1px] bg-white/10 mb-2' />
 
       {importedFolders.map((folder, idx) => (
         <div

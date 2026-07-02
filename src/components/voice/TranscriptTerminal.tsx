@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
 import { Terminal, Cpu } from 'lucide-react';
-import { Message } from '../../types';
+import React, { useEffect, useRef } from 'react';
+
+import { type Message } from '../../types';
 
 interface TranscriptTerminalProps {
     messages: Message[];
@@ -25,8 +26,8 @@ const TranscriptTerminal: React.FC<TranscriptTerminalProps> = ({ messages, class
                     <span className="text-[10px] font-mono tracking-wider uppercase">Live Transcript</span>
                 </div>
                 <div className="flex gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-j-steel/50"></div>
-                    <div className="w-2 h-2 rounded-full bg-j-steel/50"></div>
+                    <div className="w-2 h-2 rounded-full bg-j-steel/50" />
+                    <div className="w-2 h-2 rounded-full bg-j-steel/50" />
                 </div>
             </div>
 

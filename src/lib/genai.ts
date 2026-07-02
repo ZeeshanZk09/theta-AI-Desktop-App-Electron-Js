@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoogleGenAI } from "@google/genai";
+
+import { logger } from "./logger";
 
 /**
  * NANO BANANA IMAGE GENERATION SERVICE
@@ -34,7 +37,7 @@ export const generateImage = async (prompt: string, apiKey: string, retryCount =
       }
     }
 
-    console.warn("Image generation completed but no binary data was returned.");
+    logger.warn("Image generation completed but no binary data was returned.");
     return null;
 
   } catch (error: any) {
@@ -58,12 +61,12 @@ export const generateImage = async (prompt: string, apiKey: string, retryCount =
         }
       }
 
-      console.warn(`Rate limit (429) hit. Waiting ${Math.round(delay / 1000)}s before retry ${retryCount + 1}...`);
+      logger.warn(`Rate limit (429) hit. Waiting ${Math.round(delay / 1000)}s before retry ${retryCount + 1}...`);
       await new Promise(resolve => setTimeout(resolve, delay));
       return generateImage(prompt, apiKey, retryCount + 1);
     }
 
-    console.error("Nano Banana Generation Error:", error);
+    logger.error("Nano Banana Generation Error:", error);
     return null;
   }
 };

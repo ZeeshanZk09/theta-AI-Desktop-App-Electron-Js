@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { Plus, Trash2, CheckCircle2, Circle, AlertCircle, Clock, Tag } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { useAudio } from '../../hooks/useAudio';
 
 interface Task {
@@ -161,7 +162,7 @@ const TasksSection: React.FC<TasksSectionProps> = ({ tasks, onSaveTasks }) => {
                 {tasks.filter((t) => t.completed).length}/{tasks.length}
               </span>
             </div>
-            <div className='w-[1px] h-4 bg-white/10'></div>
+            <div className='w-[1px] h-4 bg-white/10' />
             <span className='text-[10px] text-j-text-muted uppercase tracking-tighter'>
               Efficiency
             </span>
@@ -171,7 +172,7 @@ const TasksSection: React.FC<TasksSectionProps> = ({ tasks, onSaveTasks }) => {
 
       {/* Quick Add Bar */}
       <form onSubmit={handleAddTask} className='relative group mb-8 space-y-3'>
-        <div className='absolute inset-0 bg-j-cyan/5 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity'></div>
+        <div className='absolute inset-0 bg-j-cyan/5 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity' />
         <div className='relative flex items-center bg-white/[0.03] border border-white/[0.1] rounded-[32px] p-2 pr-6 focus-within:border-j-cyan/40 transition-all'>
           <div className='flex-1 px-6'>
             <input
@@ -185,7 +186,7 @@ const TasksSection: React.FC<TasksSectionProps> = ({ tasks, onSaveTasks }) => {
           <div className='flex items-center gap-3'>
             <select
               value={selectedPriority}
-              onChange={(e: any) => setSelectedPriority(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedPriority(e.target.value as "low" | "medium" | "high" | "critical")}
               className='bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-j-text-muted focus:outline-none hover:bg-white/10 cursor-pointer'
             >
               <option value='low'>Low Priority</option>
@@ -265,7 +266,7 @@ const TasksSection: React.FC<TasksSectionProps> = ({ tasks, onSaveTasks }) => {
             key={view.id}
             onClick={() => {
               playClick();
-              setActiveView(view.id as any);
+              setActiveView(view.id as "all" | "today" | "upcoming" | "completed" | "priority");
             }}
             className={`px-4 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
               activeView === view.id

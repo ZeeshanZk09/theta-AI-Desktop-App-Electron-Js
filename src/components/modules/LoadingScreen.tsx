@@ -1,4 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
+
+import { logger } from "../../lib/logger";
 
 interface LoadingScreenProps {
   onFinished?: () => void;
@@ -30,7 +33,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinished }) => {
     // Attempt audio play
     if (audioLoadingRef.current) {
       audioLoadingRef.current.volume = 0.7;
-      audioLoadingRef.current.play().catch(console.error);
+      audioLoadingRef.current.play().catch(logger.error);
     }
 
     let currentProgress = 0;
@@ -72,7 +75,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinished }) => {
 
     if (audioFinishedRef.current) {
       audioFinishedRef.current.volume = 0.8;
-      audioFinishedRef.current.play().catch(console.error);
+      audioFinishedRef.current.play().catch(logger.error);
     }
 
     setTimeout(() => {
@@ -92,8 +95,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinished }) => {
       </audio>
 
       {/* Background Texture (Scanlines & Vignette) */}
-      <div className='absolute inset-0 bg-scan-line opacity-20 pointer-events-none'></div>
-      <div className='absolute inset-0 bg-radial-gradient from-transparent to-[#000000] opacity-80 pointer-events-none'></div>
+      <div className='absolute inset-0 bg-scan-line opacity-20 pointer-events-none' />
+      <div className='absolute inset-0 bg-radial-gradient from-transparent to-[#000000] opacity-80 pointer-events-none' />
 
       {/* Main Content Container */}
       <div className='relative z-10 flex flex-col items-center w-[400px]'>
@@ -110,7 +113,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinished }) => {
           >
             Theta
           </h1>
-          <div className='w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent mt-4 opacity-50 group-hover:opacity-100 transition-opacity duration-500'></div>
+          <div className='w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent mt-4 opacity-50 group-hover:opacity-100 transition-opacity duration-500' />
         </div>
 
         {/* Progress Bar Container */}

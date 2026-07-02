@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 
-const electronAPI = (window as any).electronAPI;
+import { logger } from "../lib/logger";
+
+const electronAPI = window.electronAPI;
 
 export const useZoom = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -27,14 +29,13 @@ export const useZoom = () => {
       electronAPI.setZoomFactor(optimal);
       setZoomLevel(optimal);
       isInitialApplied.current = true;
-      console.log(`Final Auto-Scale Applied: ${Math.round(optimal * 100)}% based on screen width ${window.screen.width}px`);
+      logger.log(`Final Auto-Scale Applied: ${Math.round(optimal * 100)}% based on screen width ${window.screen.width}px`);
     };
 
     // Immediately apply scaling to avoid visual jumps
     applyScaling();
 
     // Listen for resize events to re-apply if needed (optional, mostly for dev)
-    /* window.addEventListener('resize', applyScaling); */
 
     // Manual Shortcuts remains stable
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,12 +43,12 @@ export const useZoom = () => {
       if (isControl) {
         if (e.key === '=' || e.key === '+') {
           e.preventDefault();
-          const current = (window as any).electronAPI.getZoomFactor();
-          (window as any).electronAPI.setZoomFactor(Math.min(current + 0.1, 2.5));
+          const current = window.electronAPI.getZoomFactor();
+          window.electronAPI.setZoomFactor(Math.min(current + 0.1, 2.5));
         } else if (e.key === '-' || e.key === '_') {
           e.preventDefault();
-          const current = (window as any).electronAPI.getZoomFactor();
-          (window as any).electronAPI.setZoomFactor(Math.max(current - 0.1, 0.4));
+          const current = window.electronAPI.getZoomFactor();
+          window.electronAPI.setZoomFactor(Math.max(current - 0.1, 0.4));
         } else if (e.key === '0') {
           e.preventDefault();
           applyScaling();

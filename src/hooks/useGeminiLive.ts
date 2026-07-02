@@ -1,13 +1,17 @@
+import { GoogleGenAI, Modality, type LiveServerMessage, StartSensitivity, EndSensitivity, type Tool } from '@google/genai';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { GoogleGenAI, Modality, LiveServerMessage, StartSensitivity, EndSensitivity } from '@google/genai';
-import { decode, decodeAudioData, createBlob } from '../lib/audio-helpers';
-import { Message, ConnectionStatus } from '../types';
-import { SystemLog, UseGeminiLiveProps } from '../types/gemini-live';
+
 import { tools, getSystemInstruction } from '../config/gemini-config';
+import { decode, decodeAudioData, createBlob } from '../lib/audio-helpers';
 import { handleToolCalls } from '../lib/gemini-tool-runner';
+import { logger } from "../lib/logger";
+import { type Message, ConnectionStatus } from '../types';
+import { type SystemLog, type UseGeminiLiveProps } from '../types/gemini-live';
 
 // Safely access electronAPI from window
-const electronAPI = (window as any).electronAPI;
+ 
+// @ts-ignore
+const electronAPI = window.electronAPI;
 
 export const useGeminiLive = ({
   onSpeakingChanged,
@@ -30,14 +34,19 @@ export const useGeminiLive = ({
   const maxContextMessages = Math.max(1, Number(historySettings?.maxContextMessages ?? 20));
 
   const [status, setStatus] = useState<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
-  const [messages, setMessages] = useState<Message[]>(initialHistory.slice(-maxContextMessages));
+  const [messages, setMessages] = useState<Message[]>(initialHistory.slice(-maxContextMessages).map(msg => ({
+    id: `${Date.now()}-${Math.random()}`,
+    role: msg.role === 'user' ? 'user' : 'assistant',
+    text: msg.text,
+    timestamp: msg.timestamp || Date.now()
+  })));
   const [currentInput, setCurrentInput] = useState('');
   const [currentOutput, setCurrentOutput] = useState('');
   const [currentThought, setCurrentThought] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const thinkingEnabledRef = useRef(true);
-  const [thinkingEnabled, setThinkingEnabledState] = useState(true);
+  const [thinkingEnabled, setThinkingEnabled] = useState(true);
   const currentTurnHasThinkingRef = useRef(false); // Track if current turn has received thinking
   const [logs, setLogs] = useState<SystemLog[]>([]);
   
@@ -49,8 +58,8 @@ export const useGeminiLive = ({
     attachedFilesRef.current = attachedFiles;
   }, [attachedFiles]);
 
-  const setThinkingEnabled = useCallback((enabled: boolean) => {
-    setThinkingEnabledState(enabled);
+  const setThinkingEnabledState = useCallback((enabled: boolean) => {
+    setThinkingEnabled(enabled);
     thinkingEnabledRef.current = enabled;
   }, []);
 
@@ -64,24 +73,24 @@ export const useGeminiLive = ({
   // No reconnection needed - budget is applied at connect time
   // Toggle state is checked via thinkingEnabledRef during runtime
 
-  const addLog = useCallback((type: SystemLog['type'], message: string, details?: any) => {
+  const addLog = useCallback((type: SystemLog['type'], message: string, details?: unknown) => {
     const newLog: SystemLog = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
       type,
       message,
-      details
+      details: details as Record<string, unknown>
     };
     setLogs(prev => [...prev.slice(-99), newLog]); // Keep last 100 logs
 
     // EXTREME LOGGING FOR DEBUGGING
     const timestamp = new Date().toLocaleTimeString();
     const prefix = `[Theta-DEBUG ${timestamp}]`;
-    if (type === 'error') console.error(`${prefix} ❌ ${message}`, details || '');
-    else if (type === 'warning') console.warn(`${prefix} ⚠️ ${message}`, details || '');
-    else if (type === 'tool') console.log(`%c${prefix} 🛠️ ${message}`, 'color: #00e5ff; font-weight: bold; border-left: 3px solid #00e5ff; padding-left: 5px;', details || '');
-    else if (type === 'success') console.log(`%c${prefix} ✅ ${message}`, 'color: #00ff8f; font-weight: bold;', details || '');
-    else console.log(`${prefix} ℹ️ ${message}`, details || '');
+    if (type === 'error') logger.error(`${prefix} ❌ ${message}`, details || '');
+    else if (type === 'warning') logger.warn(`${prefix} ⚠️ ${message}`, details || '');
+    else if (type === 'tool') logger.log(`%c${prefix} 🛠️ ${message}`, 'color: #00e5ff; font-weight: bold; border-left: 3px solid #00e5ff; padding-left: 5px;', details || '');
+    else if (type === 'success') logger.log(`%c${prefix} ✅ ${message}`, 'color: #00ff8f; font-weight: bold;', details || '');
+    else logger.log(`${prefix} ℹ️ ${message}`, details || '');
   }, []);
 
 
@@ -92,25 +101,29 @@ export const useGeminiLive = ({
   const inputAnalyserRef = useRef<AnalyserNode | null>(null);
   const nextStartTimeRef = useRef<number>(0);
   const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
-  const sessionRef = useRef<any>(null);
+  const sessionRef = useRef<{
+    close: () => void;
+    sendRealtimeInput: (params: [{ mimeType: string; data: string }] | { media: { mimeType: string; data: string } }) => void;
+    sendClientContent: (params: { turns: { role: string; parts: { text?: string; inlineData?: { mimeType: string; data: string } }[] }[], turnComplete: boolean }) => void;
+  } | null>(null);
   const micStreamRef = useRef<MediaStream | null>(null);
 
-  const cleanup = useCallback(() => {
-    console.log('Cleaning up session and audio...');
+  const cleanup = useCallback(async() => {
+    logger.log('Cleaning up session and audio...');
     if (micStreamRef.current) {
       micStreamRef.current.getTracks().forEach(track => track.stop());
     }
     if (audioContextInputRef.current && audioContextInputRef.current.state !== 'closed') {
-      audioContextInputRef.current.close();
+      await audioContextInputRef.current.close();
     }
     if (audioContextOutputRef.current && audioContextOutputRef.current.state !== 'closed') {
-      audioContextOutputRef.current.close();
+      await audioContextOutputRef.current.close();
     }
     if (sessionRef.current) {
       try {
         sessionRef.current.close();
       } catch (e) {
-        console.warn('Error closing session:', e);
+        logger.warn('Error closing session:', e);
       }
     }
 
@@ -136,8 +149,8 @@ export const useGeminiLive = ({
       }
 
       // 1. Initialize Audio Contexts
-      const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
-      const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+      const inputCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+      const outputCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
 
       await inputCtx.resume();
       await outputCtx.resume();
@@ -180,7 +193,7 @@ export const useGeminiLive = ({
             includeThoughts: true, // Always request thoughts so we can see them if budget > 0
             thinkingBudget: thinkingEnabledRef.current ? 2048 : 0 // 2048 tokens when on, 0 when off
           },
-          tools: tools as any,
+          tools: tools as Tool[],
           systemInstruction: getSystemInstruction(
             userProfile,
             vaultInfo,
@@ -194,7 +207,7 @@ export const useGeminiLive = ({
           onopen: () => {
             addLog('success', 'Theta Live engine connected');
             setStatus(ConnectionStatus.CONNECTED);
-            console.log('%c[Theta-SESSION] Established @ ' + new Date().toLocaleTimeString(), 'background: #004411; color: white; padding: 2px 5px; border-radius: 3px;');
+            logger.log('%c[Theta-SESSION] Established @ ' + new Date().toLocaleTimeString(), 'background: #004411; color: white; padding: 2px 5px; border-radius: 3px;');
 
             // Start streaming microphone
             if (inputCtx && stream) {
@@ -203,7 +216,9 @@ export const useGeminiLive = ({
                 const scriptProcessor = inputCtx.createScriptProcessor(512, 1, 1);
 
                 // Connect mic to input analyser
-                source.connect(inputAnalyserRef.current!);
+                if (inputAnalyserRef.current) {
+                  source.connect(inputAnalyserRef.current);
+                }
 
                 scriptProcessor.onaudioprocess = (e) => {
                   const inputData = e.inputBuffer.getChannelData(0);
@@ -213,7 +228,7 @@ export const useGeminiLive = ({
                   }).catch(err => {
                     // Silent on audio heartbeat unless it's a real crash
                     if (status === ConnectionStatus.CONNECTED) {
-                      console.warn('[Theta-DEBUG] Lost audio heartbeat:', err.message);
+                      logger.warn('[Theta-DEBUG] Lost audio heartbeat:', err.message);
                     }
                   });
                 };
@@ -222,7 +237,7 @@ export const useGeminiLive = ({
                 scriptProcessor.connect(inputCtx.destination);
                 addLog('info', 'Microphone hardware linked to AI session');
               } catch (err) {
-                console.error('[Theta-DEBUG] Audio Source Linking Failed:', err);
+                logger.error('[Theta-DEBUG] Audio Source Linking Failed:', err);
                 setError('Could not start microphone stream.');
               }
             }
@@ -251,7 +266,11 @@ export const useGeminiLive = ({
                 const audioBuffer = await decodeAudioData(decode(base64Audio), ctx, 24000, 1);
                 const source = ctx.createBufferSource();
                 source.buffer = audioBuffer;
-                source.connect(outputAnalyserRef.current!);
+                if (outputAnalyserRef.current) {
+                  source.connect(outputAnalyserRef.current);
+                } else {
+                  source.connect(ctx.destination);
+                }
 
                 source.addEventListener('ended', () => {
                   sourcesRef.current.delete(source);
@@ -264,13 +283,13 @@ export const useGeminiLive = ({
                 nextStartTimeRef.current += audioBuffer.duration;
                 sourcesRef.current.add(source);
               } catch (err) {
-                console.error("Error playing audio chunk:", err);
+                logger.error("Error playing audio chunk:", err);
               }
             }
 
             // Interruption handling
             if (message.serverContent?.interrupted) {
-              console.log('Model interrupted');
+              logger.log('Model interrupted');
               sourcesRef.current.forEach(s => {
                 try { s.stop(); } catch (e) { }
               });
@@ -319,8 +338,8 @@ export const useGeminiLive = ({
                 const newOutput = prev + text;
                 // Update the last assistant message in real-time if it exists, otherwise create it
                 setMessages(msgs => {
-                  const lastMsg = msgs[msgs.length - 1];
-                  if (lastMsg && lastMsg.role === 'assistant' && lastMsg.isStreaming) {
+                  const lastMsg = msgs.at(-1);
+                  if (lastMsg?.role === 'assistant' && lastMsg.isStreaming) {
                     const updated = [...msgs];
                     updated[updated.length - 1] = { ...lastMsg, text: newOutput };
                       return updated.length > maxContextMessages
@@ -414,8 +433,8 @@ export const useGeminiLive = ({
             if (message.toolCall) {
               const calls = message.toolCall.functionCalls;
               if (calls) {
-                sessionPromise.then(session => {
-                  handleToolCalls(calls, session, {
+                await sessionPromise.then(async session => {
+                 await handleToolCalls(calls, session, {
                     addLog,
                     onVisualizingChanged,
                     onImageGenerated,
@@ -436,33 +455,41 @@ export const useGeminiLive = ({
             }
 
           },
-          onerror: (e) => {
-            console.error('%c[Theta-CRITICAL] WebSocker Error:', 'background: #440000; color: white;', e);
+          onerror: async (e) => {
+            logger.error('%c[Theta-CRITICAL] WebSocker Error:', 'background: #440000; color: white;', e);
             addLog('error', 'Session error occurred', e);
             setError('Connection lost. Please try again.');
-            cleanup();
+            await cleanup();
 
           },
-          onclose: (e) => {
-            console.warn(`%c[Theta-DISCONNECT] Closed | Code: ${e.code} | Reason: ${e.reason || 'No specific reason'}`, 'color: orange; font-weight: bold;');
+          onclose:async (e) => {
+            logger.warn(`%c[Theta-DISCONNECT] Closed | Code: ${e.code} | Reason: ${e.reason || 'No specific reason'}`, 'color: orange; font-weight: bold;');
             addLog('info', `Session closed (Code: ${e.code})`);
-            cleanup();
+            await cleanup();
 
           }
         }
       });
 
-      sessionRef.current = await sessionPromise;
-    } catch (err: any) {
-      console.error('Connection failed during setup:', err);
-      setError(err.message || 'Failed to initialize session');
+      sessionRef.current = await sessionPromise as unknown as NonNullable<typeof sessionRef.current>;
+    } catch (err: unknown) {
+      const error = err as Error;
+      logger.error('Connection failed during setup:', error);
+      setError(error.message || 'Failed to initialize session');
       setStatus(ConnectionStatus.ERROR);
-      cleanup();
+     await cleanup();
     }
   };
 
   useEffect(() => {
-    return cleanup;
+    async function cleanupEffect() {
+      await cleanup();
+    }
+    cleanupEffect().then(()=>{
+      logger.log('cleanupEffect completed');
+    }).catch((error)=>{
+      logger.error('cleanupEffect failed:', error);
+    })
   }, [cleanup]);
 
   const sendVideoFrame = useCallback((base64Data: string) => {
@@ -475,7 +502,7 @@ export const useGeminiLive = ({
           }
         });
       } catch (err) {
-        console.error('Error sending video frame:', err);
+        logger.error('Error sending video frame:', err);
       }
     }
   }, [status]);
@@ -493,7 +520,7 @@ export const useGeminiLive = ({
         let outboundText = text;
         if (shouldForceDeepReasoning) {
           if (!thinkingEnabledRef.current) {
-            setThinkingEnabled(true);
+            setThinkingEnabledState(true);
             addLog('info', 'Deep Reasoning auto-enabled for business/financial query');
           }
           outboundText = `[DEEP_REASONING_REQUIRED] ${text}`;
@@ -509,7 +536,9 @@ export const useGeminiLive = ({
           turnComplete: true
         });
 
-        if (!silent) {
+        if (silent) {
+          addLog('info', `Sent background system command`);
+        } else {
           // Add to messages immediately for responsiveness
           setMessages(prev => {
             const appended = [...prev, {
@@ -523,16 +552,14 @@ export const useGeminiLive = ({
               : appended;
           });
           addLog('info', `User sent message: ${text.substring(0, 30)}${text.length > 30 ? '...' : ''}`);
-        } else {
-          addLog('info', `Sent background system command`);
         }
       } catch (err) {
 
 
-        console.error('Error sending text message:', err);
+        logger.error('Error sending text message:', err);
       }
     }
-  }, [status, addLog, maxContextMessages, setThinkingEnabled]);
+  }, [status, addLog, maxContextMessages, setThinkingEnabledState]);
 
   const sendMultimodalMessage = useCallback((text: string, attachments: { name: string, data: string, mimeType: string }[]) => {
     if (sessionRef.current && status === ConnectionStatus.CONNECTED) {
@@ -545,7 +572,7 @@ export const useGeminiLive = ({
 
         // Build parts array: FILES FIRST, then TEXT PROMPT
         // This ensures AI sees the file data before the question (proper context)
-        const parts: any[] = [];
+        const parts: { text?: string; inlineData?: { mimeType: string; data: string } }[] = [];
 
         // Add all file attachments as inlineData parts
         attachments.forEach(file => {
@@ -562,7 +589,7 @@ export const useGeminiLive = ({
         });
 
         // Add text prompt AFTER files (so AI analyzes files in context of the prompt)
-        const finalPrompt = text && text.trim() 
+        const finalPrompt = text?.trim() 
           ? text 
           : `I've attached ${attachments.length} file(s) (${fileNames}). Please analyze them carefully and tell me what you find. Be specific and accurate.`;
         
@@ -574,7 +601,7 @@ export const useGeminiLive = ({
         sessionRef.current.sendClientContent({
           turns: [{
             role: 'user',
-            parts: parts
+            parts
           }],
           turnComplete: true
         });
@@ -595,9 +622,10 @@ export const useGeminiLive = ({
         });
 
         addLog('success', `✓ Multimodal message sent: ${attachments.length} files + prompt`);
-      } catch (err: any) {
-        console.error('Multimodal transmission failed:', err);
-        addLog('error', `Transmission Error: ${err.message}`);
+      } catch (err: unknown) {
+        const error = err as Error;
+        logger.error('Multimodal transmission failed:', error);
+        addLog('error', `Transmission Error: ${error.message}`);
       }
     } else {
       addLog('warning', 'Connection unavailable. Establish session before sending files.');
@@ -623,7 +651,7 @@ export const useGeminiLive = ({
     if (newFiles.length > 0 && sessionRef.current) {
       addLog('info', `🔄 Auto-syncing ${newFiles.length} new attachments to AI context...`);
 
-      const parts: any[] = [];
+      const parts: { text?: string; inlineData?: { mimeType: string; data: string } }[] = [];
 
       newFiles.forEach(file => {
         // Extract raw base64 (remove data:image/png;base64, prefix if present)
@@ -649,13 +677,14 @@ export const useGeminiLive = ({
         sessionRef.current.sendClientContent({
           turns: [{
             role: 'user',
-            parts: parts
+            parts
           }],
           turnComplete: true
         });
         addLog('success', `✓ ${newFiles.length} Files uploaded to AI Vision Context`);
-      } catch (err: any) {
-        console.error('Auto-upload failed:', err);
+      } catch (err: unknown) {
+        const error = err as Error;
+        logger.error('Auto-upload failed:', error);
       }
     }
     
@@ -686,7 +715,7 @@ export const useGeminiLive = ({
     currentThought,
     isThinking,
     thinkingEnabled,
-    setThinkingEnabled,
+    setThinkingEnabledState,
     addLog,
     logs
   };

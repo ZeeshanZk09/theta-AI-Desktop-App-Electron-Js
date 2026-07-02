@@ -1,11 +1,11 @@
-import React from 'react';
 import { AlertTriangle, ShieldCheck, ShieldAlert, ShieldX } from 'lucide-react';
+import React from 'react';
 
 export interface ActionApprovalRequest {
   requestId: string;
   action: string;
   detail: string;
-  payload?: any;
+  payload?: Record<string, unknown>;
   source?: string;
   risk: 'green' | 'yellow' | 'red';
   requestedAt?: number;

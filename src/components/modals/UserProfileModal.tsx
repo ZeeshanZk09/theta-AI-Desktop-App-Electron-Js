@@ -1,10 +1,14 @@
 import { User, X } from 'lucide-react';
+
 import { useAudio } from '../../hooks/useAudio';
+
+import type { UserProfile } from '../../types/index';
+
 
 interface UserProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  userProfile: any;
+  userProfile: UserProfile;
   handleUpdateProfile: (field: string, value: string) => void;
 }
 
@@ -61,15 +65,15 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 field: 'profession',
                 placeholder: 'e.g. Senior Software Engineer',
               },
-            ].map((item) => (
+            ].map((item: { label: string; field: keyof typeof userProfile; placeholder: string }) => (
               <div key={item.field} className='space-y-2'>
                 <label className='text-[10px] font-mono text-j-text-muted uppercase tracking-widest pl-1'>
                   {item.label}
                 </label>
                 <input
                   type='text'
-                  value={userProfile[item.field]}
-                  onChange={(e) => handleUpdateProfile(item.field, e.target.value)}
+                  value={(userProfile[item.field] as string) || ''}
+                  onChange={(e) => handleUpdateProfile(item.field as string, e.target.value)}
                   placeholder={item.placeholder}
                   className='w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-j-text-primary focus:outline-none focus:border-j-blue/50 transition-all shadow-inner'
                 />
@@ -95,7 +99,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
               Profile Status: <span className='text-j-blue font-bold'>Encrypted</span>
             </div>
             <div className='flex items-center gap-2 text-[10px] font-mono text-j-blue uppercase'>
-              <div className='w-1.5 h-1.5 bg-j-blue rounded-full animate-pulse shadow-[0_0_5px_#0085FF]'></div>
+              <div className='w-1.5 h-1.5 bg-j-blue rounded-full animate-pulse shadow-[0_0_5px_#0085FF]' />
               Identity Verified
             </div>
           </div>

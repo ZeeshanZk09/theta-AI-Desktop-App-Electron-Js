@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useEffect, useRef, useMemo } from 'react';
 
@@ -59,14 +60,15 @@ const DotGlobe: React.FC<DotGlobeProps> = ({
             p.push({
                 x: r * Math.cos(phi),
                 y: r * Math.sin(phi),
-                z: z,
+                z,
                 isLand: isLand(lat, lon),
                 type: Math.random() > 0.5 ? 1 : 0,
                 offset: Math.random() * Math.PI * 2
             });
         }
         return p;
-    }, []);
+     
+  }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -75,7 +77,7 @@ const DotGlobe: React.FC<DotGlobeProps> = ({
         if (!ctx) return;
 
         let rotationY = 0;
-        let rotationX = 0.3;
+        const rotationX = 0.3;
         let angle = 0;
 
         const render = () => {
@@ -115,9 +117,9 @@ const DotGlobe: React.FC<DotGlobeProps> = ({
 
             // Sorting for depth
             const sortedParticles = [...particles].map(p => {
-                let x = p.x * Math.cos(rotationY) - p.z * Math.sin(rotationY);
+                const x = p.x * Math.cos(rotationY) - p.z * Math.sin(rotationY);
                 let z = p.x * Math.sin(rotationY) + p.z * Math.cos(rotationY);
-                let y = p.y * Math.cos(rotationX) - z * Math.sin(rotationX);
+                const y = p.y * Math.cos(rotationX) - z * Math.sin(rotationX);
                 z = p.y * Math.sin(rotationX) + z * Math.cos(rotationX);
                 return { ...p, rx: x, ry: y, rz: z };
             }).sort((a, b) => a.rz - b.rz);

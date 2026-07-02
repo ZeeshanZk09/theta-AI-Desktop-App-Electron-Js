@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import { Map, Sliders, RefreshCw } from 'lucide-react';
-import type { DashboardData } from '../lib/dashboard';
+import React from 'react';
 
 interface TodayHeadlinesProps {
     data: {
-        headlines: string[];
-        weather: {
-            today: string;
-            tomorrow: string;
-            dayAfter: string;
+        headlines?: string[];
+        weather?: {
+            today?: string;
+            tomorrow?: string;
+            dayAfter?: string;
         };
     } | null;
     loading?: boolean;
@@ -52,8 +51,8 @@ const TodayHeadlines: React.FC<TodayHeadlinesProps> = ({
             <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pr-2">
                 {data ? (
                     <ul className="text-xs text-j-text-secondary list-disc pl-4 space-y-2 font-mono leading-relaxed opacity-100">
-                        {data.headlines.map((headline, idx) => (
-                            <li key={idx} className={idx === data.headlines.length - 1 ? 'opacity-70' : ''}>
+                        {(data.headlines || []).map((headline: string, idx: number) => (
+                            <li key={idx} className={idx === (data?.headlines?.length || 0) - 1 ? 'opacity-70' : ''}>
                                 {headline}
                             </li>
                         ))}
@@ -61,7 +60,7 @@ const TodayHeadlines: React.FC<TodayHeadlinesProps> = ({
                 ) : (
                     <div className="flex flex-col gap-2 opacity-20">
                         {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="h-3 bg-white/20 rounded-full w-full animate-pulse"></div>
+                            <div key={i} className="h-3 bg-white/20 rounded-full w-full animate-pulse" />
                         ))}
                     </div>
                 )}
@@ -72,25 +71,25 @@ const TodayHeadlines: React.FC<TodayHeadlinesProps> = ({
                 {data ? (
                     <>
                         <div className="flex items-center gap-2 text-xs text-j-text-primary font-medium">
-                            <span>{data.weather.today}</span>
+                            <span>{data.weather?.today}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-j-text-secondary">
-                            <span>{data.weather.tomorrow}</span>
+                            <span>{data.weather?.tomorrow}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-j-text-secondary">
-                            <span>{data.weather.dayAfter}</span>
+                            <span>{data.weather?.dayAfter}</span>
                         </div>
                     </>
                 ) : (
                     <div className="space-y-2 opacity-20">
-                        <div className="h-4 bg-white/20 rounded w-1/2 animate-pulse"></div>
-                        <div className="h-4 bg-white/20 rounded w-1/3 animate-pulse"></div>
+                        <div className="h-4 bg-white/20 rounded w-1/2 animate-pulse" />
+                        <div className="h-4 bg-white/20 rounded w-1/3 animate-pulse" />
                     </div>
                 )}
             </div>
 
             <div className="absolute bottom-3 right-3">
-                <div className="w-5 h-5 border border-white/10 rounded-sm"></div>
+                <div className="w-5 h-5 border border-white/10 rounded-sm" />
             </div>
         </div>
     );

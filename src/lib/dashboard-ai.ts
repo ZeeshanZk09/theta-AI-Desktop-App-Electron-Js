@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoogleGenAI } from '@google/genai';
+
+import { logger } from "./logger";
 
 export interface BusinessIdea {
   id: string;
@@ -77,10 +80,10 @@ interface ModelJsonRequestOptions {
 const logDashboardAi = (stage: string, details?: Record<string, unknown>) => {
   const timestamp = new Date().toISOString();
   if (details) {
-    console.debug(`[DashboardAI ${timestamp}] ${stage}`, details);
+    logger.debug(`[DashboardAI ${timestamp}] ${stage}`, details);
     return;
   }
-  console.debug(`[DashboardAI ${timestamp}] ${stage}`);
+  logger.debug(`[DashboardAI ${timestamp}] ${stage}`);
 };
 
 const tryParseJson = (value: string) => {

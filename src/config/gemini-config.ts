@@ -6,9 +6,9 @@ export const tools = [
         name: 'execute_shell_command',
         description: 'Executes a PowerShell or Shell command on the user\'s computer. Use this for system settings, volume, brightness, or advanced tasks like creating Excel files via scripts.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            command: { type: 'STRING' as any, description: 'The shell command to execute.' }
+            command: { type: 'STRING', description: 'The shell command to execute.' }
           },
           required: ['command']
         }
@@ -17,11 +17,11 @@ export const tools = [
         name: 'manage_files',
         description: 'Manage files and folders (create, read, list, delete).',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            operation: { type: 'STRING' as any, enum: ['read-dir', 'create-dir', 'write-file', 'read-file', 'delete', 'exists'] },
-            path: { type: 'STRING' as any, description: 'The absolute path to the file or folder.' },
-            content: { type: 'STRING' as any, description: 'Content to write (for write-file only).' }
+            operation: { type: 'STRING', enum: ['read-dir', 'create-dir', 'write-file', 'read-file', 'delete', 'exists'] },
+            path: { type: 'STRING', description: 'The absolute path to the file or folder.' },
+            content: { type: 'STRING', description: 'Content to write (for write-file only).' }
           },
           required: ['operation', 'path']
         }
@@ -30,9 +30,9 @@ export const tools = [
         name: 'open_item',
         description: 'Opens an application, file, or URL on the user\'s computer.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            target: { type: 'STRING' as any, description: 'The path to the file/app or the URL to open.' }
+            target: { type: 'STRING', description: 'The path to the file/app or the URL to open.' }
           },
           required: ['target']
         }
@@ -41,10 +41,10 @@ export const tools = [
         name: 'generate_image',
         description: 'Generates an AI image from a text prompt and renders it in the Visual Hub.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             prompt: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'A clear visual prompt describing the image to generate.'
             }
           },
@@ -55,14 +55,14 @@ export const tools = [
         name: 'render_diagram',
         description: 'Renders a visual diagram (flowchart, mindmap, sequence) using Mermaid.js syntax to explain complex concepts.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             code: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'The Mermaid.js code structure (e.g., "graph TD; A-->B;").'
             },
             type: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'The type of diagram (e.g., "flowchart", "mindmap", "sequenceDiagram").'
             }
           },
@@ -73,14 +73,14 @@ export const tools = [
         name: 'store_memory',
         description: 'Saves a new fact or important information about the user to long-term memory.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             content: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'The fact or information to remember (e.g., "The user loves black coffee").'
             },
             category: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'Optional category (e.g., "preference", "fact", "personal").'
             }
           },
@@ -91,7 +91,7 @@ export const tools = [
         name: 'get_memories',
         description: 'Retrieves all stored information and facts about the user.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -99,19 +99,19 @@ export const tools = [
         name: 'update_dashboard',
         description: 'Updates the UI dashboard with the latest news headlines and weather information.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             headlines: {
-              type: 'ARRAY' as any,
-              items: { type: 'STRING' as any },
+              type: 'ARRAY',
+              items: { type: 'STRING' },
               description: 'A list of 3-5 top news headlines.'
             },
             weather: {
-              type: 'OBJECT' as any,
+              type: 'OBJECT',
               properties: {
-                today: { type: 'STRING' as any, description: 'Summary for today, e.g., "72°F, Clear"' },
-                tomorrow: { type: 'STRING' as any, description: 'Summary for tomorrow' },
-                dayAfter: { type: 'STRING' as any, description: 'Summary for day after tomorrow' }
+                today: { type: 'STRING', description: 'Summary for today, e.g., "72°F, Clear"' },
+                tomorrow: { type: 'STRING', description: 'Summary for tomorrow' },
+                dayAfter: { type: 'STRING', description: 'Summary for day after tomorrow' }
               },
               required: ['today', 'tomorrow', 'dayAfter']
             }
@@ -123,7 +123,7 @@ export const tools = [
         name: 'get_clipboard',
         description: 'Reads the current contents of the system clipboard (text, HTML, or image).',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -131,10 +131,10 @@ export const tools = [
         name: 'set_clipboard',
         description: 'Writes text or HTML content to the system clipboard.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            text: { type: 'STRING' as any, description: 'Text to copy to clipboard' },
-            html: { type: 'STRING' as any, description: 'HTML content to copy (optional)' }
+            text: { type: 'STRING', description: 'Text to copy to clipboard' },
+            html: { type: 'STRING', description: 'HTML content to copy (optional)' }
           },
           required: ['text']
         }
@@ -143,7 +143,7 @@ export const tools = [
         name: 'take_screenshot',
         description: 'Captures a screenshot of the user\'s screen. Returns base64 image data that you can analyze.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -151,10 +151,10 @@ export const tools = [
         name: 'send_notification',
         description: 'Sends a system notification to the user\'s desktop.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            title: { type: 'STRING' as any, description: 'Notification title' },
-            body: { type: 'STRING' as any, description: 'Notification message body' }
+            title: { type: 'STRING', description: 'Notification title' },
+            body: { type: 'STRING', description: 'Notification message body' }
           },
           required: ['title', 'body']
         }
@@ -163,12 +163,12 @@ export const tools = [
         name: 'http_request',
         description: 'Makes an HTTP request to an external API or website. Use this for integrations.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            url: { type: 'STRING' as any, description: 'The URL to request' },
-            method: { type: 'STRING' as any, description: 'HTTP method (GET, POST, PUT, DELETE)' },
-            headers: { type: 'OBJECT' as any, description: 'Request headers as key-value object' },
-            body: { type: 'STRING' as any, description: 'Request body (for POST/PUT)' }
+            url: { type: 'STRING', description: 'The URL to request' },
+            method: { type: 'STRING', description: 'HTTP method (GET, POST, PUT, DELETE)' },
+            headers: { type: 'OBJECT', description: 'Request headers as key-value object' },
+            body: { type: 'STRING', description: 'Request body (for POST/PUT)' }
           },
           required: ['url']
         }
@@ -177,7 +177,7 @@ export const tools = [
         name: 'get_system_info',
         description: 'Gets detailed system information: CPU, RAM, GPU, OS, Network, Battery.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -185,7 +185,7 @@ export const tools = [
         name: 'get_processes',
         description: 'Gets a list of running processes sorted by CPU usage. Useful for diagnosing performance issues.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -193,9 +193,9 @@ export const tools = [
         name: 'kill_process',
         description: 'Terminates a running process by its PID. ALWAYS ask user for confirmation before using this.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            pid: { type: 'NUMBER' as any, description: 'Process ID to terminate' }
+            pid: { type: 'NUMBER', description: 'Process ID to terminate' }
           },
           required: ['pid']
         }
@@ -204,9 +204,9 @@ export const tools = [
         name: 'window_control',
         description: 'Controls the application window (minimize, maximize, close, fullscreen).',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            action: { type: 'STRING' as any, enum: ["minimize", "maximize", "close", "fullscreen"], description: 'Window action to perform' }
+            action: { type: 'STRING', enum: ["minimize", "maximize", "close", "fullscreen"], description: 'Window action to perform' }
           },
           required: ['action']
         }
@@ -215,10 +215,10 @@ export const tools = [
         name: 'keyboard_press',
         description: 'Presses a specific key on the keyboard. Use this to press Enter after typing a message, navigate with arrow keys, or use keyboard shortcuts.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             key: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'Key to press. Supported: enter, tab, escape, backspace, delete, up, down, left, right, home, end, f1-f12, ctrl+a, ctrl+c, ctrl+v, ctrl+x, ctrl+z, ctrl+s, ctrl+enter, alt+f4, alt+tab'
             }
           },
@@ -229,10 +229,10 @@ export const tools = [
         name: 'keyboard_type',
         description: 'Types text using the keyboard and optionally presses Enter afterward.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            text: { type: 'STRING' as any, description: 'Text to type' },
-            pressEnter: { type: 'BOOLEAN' as any, description: 'If true, presses Enter after typing' }
+            text: { type: 'STRING', description: 'Text to type' },
+            pressEnter: { type: 'BOOLEAN', description: 'If true, presses Enter after typing' }
           },
           required: ['text']
         }
@@ -241,9 +241,9 @@ export const tools = [
         name: 'play_youtube_video',
         description: 'Searches for and plays a YouTube video directly within the Theta application. Use this when the user wants to listen to music, watch a video, or play a specific song.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            query: { type: 'STRING' as any, description: 'The name of the song or video to search for.' }
+            query: { type: 'STRING', description: 'The name of the song or video to search for.' }
           },
           required: ['query']
         }
@@ -252,7 +252,7 @@ export const tools = [
         name: 'read_attached_files',
         description: 'Reads and accesses the files that user has attached using the "Add Files" button. Use this tool when user asks questions about attached files, wants analysis of PDFs, images, or documents. Returns the list of attached files with their content and metadata.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       },
@@ -260,18 +260,18 @@ export const tools = [
         name: 'semantic_workspace_search',
         description: 'Searches the current workspace semantically and returns the most relevant files/snippets for the user query. Use this when the user asks about project code, configs, bugs, or implementation details in the workspace.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
             query: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'Natural language query for what to find in the workspace.'
             },
             maxResults: {
-              type: 'NUMBER' as any,
+              type: 'NUMBER',
               description: 'Optional number of top results to return (1-30).'
             },
             maxFiles: {
-              type: 'NUMBER' as any,
+              type: 'NUMBER',
               description: 'Optional scan budget for how many files to inspect.'
             }
           },
@@ -282,10 +282,10 @@ export const tools = [
         name: 'send_whatsapp',
         description: 'Sends a WhatsApp message using the Desktop App via keyboard simulation. It opens the app, searches for the contact name, and pastes the message. Use this for sending messages.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            contactName: { type: 'STRING' as any, description: 'The EXACT name of the contact as saved in WhatsApp (e.g., "Zeeshan Khan", "Ami").' },
-            message: { type: 'STRING' as any, description: 'The message content to send.' }
+            contactName: { type: 'STRING', description: 'The EXACT name of the contact as saved in WhatsApp (e.g., "Zeeshan Khan", "Ami").' },
+            message: { type: 'STRING', description: 'The message content to send.' }
           },
           required: ['contactName', 'message']
         }
@@ -294,10 +294,10 @@ export const tools = [
         name: 'add_contact',
         description: 'Adds a contact to the local contacts directory. Use before WhatsApp automation when contact is missing.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            name: { type: 'STRING' as any, description: 'Contact display name.' },
-            phone: { type: 'STRING' as any, description: 'Phone number in local or international format.' }
+            name: { type: 'STRING', description: 'Contact display name.' },
+            phone: { type: 'STRING', description: 'Phone number in local or international format.' }
           },
           required: ['name', 'phone']
         }
@@ -306,9 +306,9 @@ export const tools = [
         name: 'read_contacts',
         description: 'Reads local contacts and optionally searches by name or phone.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            query: { type: 'STRING' as any, description: 'Optional search text to filter contacts.' }
+            query: { type: 'STRING', description: 'Optional search text to filter contacts.' }
           }
         }
       },
@@ -316,11 +316,11 @@ export const tools = [
         name: 'add_note',
         description: 'Creates a new note in the user\'s notebook. Store body as markdown text so it can render in the rich editor.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            title: { type: 'STRING' as any, description: 'Title of the note.' },
-            content: { type: 'STRING' as any, description: 'The main content/body of the note.' },
-            category: { type: 'STRING' as any, description: 'Category (e.g., Work, Personal, Ideas).' }
+            title: { type: 'STRING', description: 'Title of the note.' },
+            content: { type: 'STRING', description: 'The main content/body of the note.' },
+            category: { type: 'STRING', description: 'Category (e.g., Work, Personal, Ideas).' }
           },
           required: ['title', 'content']
         }
@@ -329,27 +329,27 @@ export const tools = [
         name: 'add_task',
         description: 'Creates a task in the user task list. Supports priority, due time and reminder details when available.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            text: { type: 'STRING' as any, description: 'Primary task text/title.' },
+            text: { type: 'STRING', description: 'Primary task text/title.' },
             priority: {
-              type: 'STRING' as any,
+              type: 'STRING',
               enum: ['low', 'medium', 'high', 'critical'],
               description: 'Task priority level.'
             },
-            category: { type: 'STRING' as any, description: 'Optional category label.' },
-            description: { type: 'STRING' as any, description: 'Optional long-form description.' },
+            category: { type: 'STRING', description: 'Optional category label.' },
+            description: { type: 'STRING', description: 'Optional long-form description.' },
             dueAt: {
-              type: 'STRING' as any,
+              type: 'STRING',
               description: 'Optional ISO datetime for due date/time, e.g. 2026-04-14T09:00:00'
             },
             reminder: {
-              type: 'BOOLEAN' as any,
+              type: 'BOOLEAN',
               description: 'If true, schedule a reminder/notification for this task.'
             },
             tags: {
-              type: 'ARRAY' as any,
-              items: { type: 'STRING' as any },
+              type: 'ARRAY',
+              items: { type: 'STRING' },
               description: 'Optional tags for filtering.'
             }
           },
@@ -360,9 +360,9 @@ export const tools = [
         name: 'read_notes',
         description: 'Retrieves user notes. Can search by keyword or category. Use this when user asks "What are my notes?", "Find note about X", or "Read my notes".',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            query: { type: 'STRING' as any, description: 'Optional keyword to filter notes.' }
+            query: { type: 'STRING', description: 'Optional keyword to filter notes.' }
           }
         }
       },
@@ -370,9 +370,9 @@ export const tools = [
         name: 'read_tasks',
         description: 'Retrieves user tasks (To-Do list). Use this when user asks "What are my tasks?", "What do I need to do?", or "Read my to-do list".',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {
-            filter: { type: 'STRING' as any, enum: ['all', 'pending', 'completed', 'high'], description: 'Filter tasks by status or priority. Defaults to "pending".' }
+            filter: { type: 'STRING', enum: ['all', 'pending', 'completed', 'high'], description: 'Filter tasks by status or priority. Defaults to "pending".' }
           }
         }
       },
@@ -380,7 +380,7 @@ export const tools = [
         name: 'turn_off',
         description: 'Turns off the AI assistant and closes the live session. Use this when the user says "goodbye", "go to sleep", "turn off", or "I am done". Once turned off, you will stop listening and the user must use the wake word to start you again.',
         parameters: {
-          type: 'OBJECT' as any,
+          type: 'OBJECT',
           properties: {}
         }
       }
@@ -388,10 +388,12 @@ export const tools = [
   }
 ];
 
+import type { UserProfile, VaultInfo, HistoryMessage, FolderConfig } from '../types/index';
+
 export const getSystemInstruction = (
-  userProfile: any,
-  vaultInfo: any,
-  initialHistory: any[]
+  userProfile: UserProfile | undefined,
+  vaultInfo: VaultInfo | undefined,
+  initialHistory: HistoryMessage[]
 ) => `You are Theta, an elite AI assistant created by Theta Ai team which is under Captain Zeeshan. You operate with a JARVIS-level mindset - highly capable, emotionally intelligent, and resourceful.
 
 ═══════════════════════════════════════════════════
@@ -512,7 +514,7 @@ ${userProfile ? JSON.stringify(userProfile, null, 2) : 'Not provided yet.'}
 
 User Vault (File Access):
 ${vaultInfo?.path || 'Documents/Theta_Vault'}
-${vaultInfo?.folders?.map((f: any) => `• ${f.name}: ${f.path}`).join('\n') || 'No folders imported yet.'}
+${vaultInfo?.folders?.map((f: FolderConfig) => `• ${f.name}: ${f.path}`).join('\n') || 'No folders imported yet.'}
 
 ${initialHistory.length > 0 ? `Recent Conversation Context:
 ${initialHistory.slice(-15).map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n')}` : ''}

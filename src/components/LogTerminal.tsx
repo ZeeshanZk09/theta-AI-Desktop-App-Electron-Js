@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
 import { Terminal, Info, CheckCircle, AlertTriangle, XCircle, Code } from 'lucide-react';
-import { SystemLog } from '../types/gemini-live';
+import React, { useEffect, useRef } from 'react';
+
+import { type SystemLog } from '../types/gemini-live';
 
 interface LogTerminalProps {
   logs: SystemLog[];
@@ -51,7 +52,7 @@ const LogTerminal: React.FC<LogTerminalProps> = ({ logs, className = '' }) => {
     <div
       className={`flex flex-col h-full bg-black/70 rounded-2xl overflow-hidden font-mono text-[10px] border border-white/20 relative group ${className}`}
     >
-      <div className='absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]'></div>
+      <div className='absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]' />
 
       <div
         className='flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar scroll-smooth relative z-10'
@@ -115,8 +116,8 @@ const LogTerminal: React.FC<LogTerminalProps> = ({ logs, className = '' }) => {
       <div className='px-5 py-3 bg-j-surface/80 backdrop-blur-md border-t border-white/10 flex items-center justify-between relative z-10'>
         <div className='flex items-center gap-3'>
           <div className='flex gap-1'>
-            <div className='w-1 h-3 bg-j-cyan rounded-full animate-pulse'></div>
-            <div className='w-1 h-3 bg-j-cyan/50 rounded-full animate-pulse delay-75'></div>
+            <div className='w-1 h-3 bg-j-cyan rounded-full animate-pulse' />
+            <div className='w-1 h-3 bg-j-cyan/50 rounded-full animate-pulse delay-75' />
           </div>
           <span className='text-[9px] font-bold uppercase tracking-[0.2em] text-j-text-secondary'>
             System_Operational
